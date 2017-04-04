@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-        <title>Publications</title>
+        <title>Codes</title>
 
         <!-- Bootstrap Core CSS -->
         <link href="/theme/css/bootstrap.min.css" rel="stylesheet">
@@ -63,9 +63,9 @@
                 <ul class="nav navbar-nav navbar-right">
 
                             <li><a href="/pages/home.html">Home</a></li>
-                            <li class="active"><a href="/pages/publications.html">Publications</a></li>
+                            <li><a href="/pages/publications.html">Publications</a></li>
                             <li><a href="/pages/notebooks.html">Notebooks</a></li>
-                            <li><a href="/pages/pages.html">Codes</a></li>
+                            <li class="active"><a href="/pages/pages.html">Codes</a></li>
                             <li><a href="/pages/contact.html">Contact</a></li>
                 </ul>
             </div>
@@ -80,7 +80,7 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <div class="post-heading">
-                        <h1>Publications</h1>
+                        <h1>Codes</h1>
                     </div>
                 </div>
             </div>
@@ -92,40 +92,19 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
     <article>
-        <p><a name="robustness"></a></p>
-<h2>Clustering-based Source-aware Assessment of True Robustness for Learning Models</h2>
-<p>We introduce a novel validation framework to measure the true robustness of learning 
-models for real-world applications by creating source-inclusive and source-exclusive 
-partitions in a dataset via clustering. We develop a robust- ness metric derived from 
-source-aware lower and upper bounds of model accuracy even when data source labels are 
-not readily available. We clearly demonstrate that even on a well-explored dataset like 
-MNIST, challenging training scenarios can be constructed under the proposed assessment 
-framework for two separate yet equally important applications: i) more rigorous learning 
-model comparison and ii) dataset adequacy evaluation. In addition, our findings not only 
-promise a more complete identification of trade-offs between model complexity, accuracy 
-and robustness but can also help researchers optimize their efforts in data collection by 
-identifying the less robust and more challenging class labels.</p>
-<p><a href="https://arxiv.org/pdf/1704.00158.pdf">arXiv</a> <a href="">BibTeX</a></p>
-<p><a href="robustness.html">Notebook to generate the illustrations in the paper</a></p>
-<p><a href="http://github.com/ozcell/phdwork/tree/master/phdwork/robustness">Codes</a></p>
-<p><a name="deepclustering"></a></p>
-<h2>Deep Clustering using Auto-Clustering Output Layer</h2>
-<p><img style="float: left; src="/images/thumbs/parentvised.png" width="240">
-In this paper, we propose a novel method to enrich the representation provided to the 
-output layer of feedforward neural networks in the form of an auto-clustering output 
-layer (ACOL) which enables the network to naturally create sub-clusters under the provided 
-main class la- bels. In addition, a novel regularization term is introduced which allows 
-ACOL to encourage the neural network to reveal its own explicit clustering objective. 
-While the underlying process of finding the subclasses is completely unsupervised, 
-semi-supervised learning is also possible based on the provided classification objective. 
-The results show that ACOL can achieve a 99.2% clustering accuracy for the semi-supervised 
-case when partial class labels are presented and a 96% accuracy for the unsupervised 
-clustering case. These findings represent a paradigm shift especially when it comes to 
-harnessing the power of deep networks for primary and secondary clustering applications 
-in large datasets.</p>
-<p><a href="https://arxiv.org/pdf/1702.08648.pdf">arXiv</a> <a href="">BibTeX</a></p>
-<p><a href="parentvised.html">Notebook to generate the illustrations in the paper</a></p>
-<p>Codes will be available soon</p>
+        <h2>True Robustness</h2>
+<p><a href="http://github.com/ozcell/phdwork/tree/master/phdwork/robustness">Codes</a> to generate the results of the 
+<a href="/pages/publications.html#robustness"><em>"Clustering-based Source-aware Assessment of True Robustness for Learning Models"</em></a>  </p>
+<p><a href="/pages/notebooks.html#robustness">Go to the notebook</a></p>
+<hr>
+<h2>Auto-clustering Output Layer</h2>
+<p>ACOL codes used for <a href="/pages/publications.html#deepclustering">parentvised learning</a>, 
+semi-supervised 
+and <a href="/pages/publications.html#deepclustering">unsupervised learning</a> will be available soon.
+<em>"Deep Clustering using Auto-Clustering Output Layer"</em>.</p>
+<p><a href="/pages/publications.html#deepclustering">Go to the publication</a><br>
+<a href="">Go to the code</a></p>
+<hr>
     </article>
             </div>
         </div>
