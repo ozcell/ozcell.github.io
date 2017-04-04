@@ -90,9 +90,7 @@
                                 <a href="/author/ozsel-kilinc.html">Ozsel Kilinc</a>
                              on Mon 03 April 2017
                         </span>
-                        Translations: 
-<a href="/2017/parentvised.html">en</a>
-
+                        
                     </div>
                 </div>
             </div>
@@ -231,7 +229,7 @@
 </pre></div>
 
 
-<p><img alt="png" src="notebook/output_6_0.png"></p>
+<p><img alt="png" src="/images/robustness/output_6_0.png"></p>
 <div class="highlight"><pre><span></span><span class="n">bin_size</span><span class="o">=</span><span class="mi">300</span>
 <span class="n">ind_2</span> <span class="o">=</span> <span class="p">(</span><span class="n">activation2</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">60000</span><span class="p">,]</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="mi">2</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">60000</span><span class="o">*</span><span class="mi">44</span><span class="p">)</span>
 
@@ -254,7 +252,7 @@
 </pre></div>
 
 
-<p><img alt="png" src="notebook/output_7_0.png"></p>
+<p><img alt="png" src="/images/robustness/output_7_0.png"></p>
 <div class="highlight"><pre><span></span><span class="n">a</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 <span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">prop_cycle</span><span class="o">=</span><span class="n">cycler</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">cm</span><span class="o">.</span><span class="n">coolwarm</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">a</span><span class="p">]))</span>
 
@@ -313,7 +311,7 @@
 </pre></div>
 
 
-<p><img alt="png" src="notebook/output_10_0.png"></p>
+<p><img alt="png" src="/images/robustness/output_10_0.png"></p>
 <div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
 
 <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">131</span><span class="p">)</span>
@@ -356,7 +354,7 @@
 </pre></div>
 
 
-<p><img alt="png" src="notebook/output_11_0.png"></p>
+<p><img alt="png" src="/images/robustness/output_11_0.png"></p>
 <div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
 <span class="c1"># and the first axes using subplot populated with data </span>
 <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
@@ -380,7 +378,7 @@
 </pre></div>
 
 
-<p><img alt="png" src="notebook/output_12_0.png"></p>
+<p><img alt="png" src="/images/robustness/output_12_0.png"></p>
 <div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
 <span class="c1"># and the first axes using subplot populated with data </span>
 <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
@@ -410,7 +408,7 @@
 </pre></div>
 
 
-<p><img alt="png" src="notebook/output_13_0.png"></p>
+<p><img alt="png" src="/images/robustness/output_13_0.png"></p>
 <div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mf">8.2</span><span class="p">))</span>
 
 <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">222</span><span class="p">)</span>
@@ -459,7 +457,7 @@
 </pre></div>
 
 
-<p><img alt="png" src="notebook/output_14_0.png"></p>
+<p><img alt="png" src="/images/robustness/output_14_0.png"></p>
 <h2>Parentvised k=10</h2>
 <div class="highlight"><pre><span></span><span class="n">load_loc</span> <span class="o">=</span> <span class="s2">&quot;/Users/ozsel/Desktop/parentvised/MNIST/pa2_k10/c3_is_0/&quot;</span>
 
@@ -514,7 +512,7 @@
 </pre></div>
 
 
-<p><img alt="png" src="notebook/output_17_0.png"></p>
+<p><img alt="png" src="/images/robustness/output_17_0.png"></p>
 <div class="highlight"><pre><span></span><span class="n">bin_size</span><span class="o">=</span><span class="mi">300</span>
 <span class="n">ind_2</span> <span class="o">=</span> <span class="p">(</span><span class="n">activation2</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">60000</span><span class="p">,]</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="mi">2</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">60000</span><span class="o">*</span><span class="mi">50</span><span class="p">)</span>
 
@@ -537,7 +535,7 @@
 </pre></div>
 
 
-<p><img alt="png" src="notebook/output_18_0.png"></p>
+<p><img alt="png" src="/images/robustness/output_18_0.png"></p>
 <div class="highlight"><pre><span></span><span class="n">a</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 <span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">prop_cycle</span><span class="o">=</span><span class="n">cycler</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">cm</span><span class="o">.</span><span class="n">coolwarm</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">a</span><span class="p">]))</span>
 
@@ -590,7 +588,7 @@
 </pre></div>
 
 
-<p><img alt="png" src="notebook/output_20_0.png"></p>
+<p><img alt="png" src="/images/robustness/output_20_0.png"></p>
 <div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
 <span class="c1"># and the first axes using subplot populated with data </span>
 <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
@@ -614,7 +612,7 @@
 </pre></div>
 
 
-<p><img alt="png" src="notebook/output_21_0.png"></p>
+<p><img alt="png" src="/images/robustness/output_21_0.png"></p>
 <div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
 <span class="c1"># and the first axes using subplot populated with data </span>
 <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
@@ -652,7 +650,7 @@
 </pre></div>
 
 
-<p><img alt="png" src="notebook/output_22_0.png"></p>
+<p><img alt="png" src="/images/robustness/output_22_0.png"></p>
 <div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mf">8.4</span><span class="p">))</span>
 <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
 <span class="n">est</span> <span class="o">=</span> <span class="n">activation2</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">60000</span><span class="p">,:,</span><span class="n">indmax2</span><span class="p">]</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -677,7 +675,7 @@
 </pre></div>
 
 
-<p><img alt="png" src="notebook/output_23_0.png"></p>
+<p><img alt="png" src="/images/robustness/output_23_0.png"></p>
     </article>
 
     <hr>
