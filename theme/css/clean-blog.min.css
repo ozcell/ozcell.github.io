@@ -13,8 +13,9 @@
  webkit-tap-highlight-color:#0085a1
  }
  
- .intro-header .page-heading .subheading,
+ 
  .intro-header .post-heading .subheading,
+ .intro-header .site-heading .subheading,
  .navbar-custom,
  h1,
  h2,
@@ -26,7 +27,7 @@
  font-family:Helvetica,Arial,sans-serif
  }
 
- .intro-header .site-heading .subheading
+.intro-header .page-heading .subheading,
  {
  font-family:'Architects Daughter', cursive
  }
