@@ -8,28 +8,13 @@
  }
  
  body{
- font-family:Helvetica,Lora,'Times New Roman',serif;
+ font-family:'Ubuntu', sans-serif;
  font-size:18px;font-weight:500;color:#404040;
  webkit-tap-highlight-color:#0085a1
  }
  
- 
- .intro-header .post-heading .subheading,
- .intro-header .site-heading .subheading,
- .navbar-custom,
- h1,
- h2,
- h3,
- h4,
- h5,
- h6
- {
- font-family:Helvetica,Arial,sans-serif
- }
-
-.intro-header .page-heading .subheading
- {
- font-family:'Architects Daughter', cursive
+ .intro-header .page-heading .subheading,.intro-header .post-heading .subheading,.intro-header .site-heading .subheading,.navbar-custom,h1,h2,h3,h4,h5,h6{
+ font-family:'Ubuntu', sans-serif;
  }
  
  p{
