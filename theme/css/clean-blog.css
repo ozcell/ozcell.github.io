@@ -43,11 +43,9 @@ blockquote {
   font-style: italic;
 }
 pre {
-  overflow-x: scroll;
-  font-size: 12px;
   white-space: nowrap;
-  word-wrap: normal;
-
+  overflow: auto;
+  font-size: 12px;
 }
 hr.small {
   max-width: 100px;
