@@ -43,9 +43,9 @@ blockquote {
   font-style: italic;
 }
 pre {
-  overflow: scroll;
+  overflow: hidden;
   font-size: 12px;
-  -webkit-overflow-scrolling: touch 
+  -ms-overflow-style:-ms-autohiding-scrollbar
 
 }
 hr.small {
