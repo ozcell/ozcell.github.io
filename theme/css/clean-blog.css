@@ -45,7 +45,8 @@ blockquote {
 pre {
   overflow: hidden;
   font-size: 12px;
-  -ms-overflow-style:-ms-autohiding-scrollbar
+  white-space: nowrap;
+  word-wrap: normal;
 
 }
 hr.small {
