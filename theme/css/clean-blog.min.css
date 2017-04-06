@@ -8,13 +8,17 @@
  }
  
  body{
- font-family:'Architects Daughter', cursive,'Open Sans',Lora,'Times New Roman',serif;
+ font-family:'Helvetica Neue',Lora,'Times New Roman',serif;
  font-size:18px;font-weight:500;color:#404040;
  webkit-tap-highlight-color:#0085a1
  }
  
  .intro-header .page-heading .subheading,.intro-header .post-heading .subheading,.intro-header .site-heading .subheading,.navbar-custom,h1,h2,h3,h4,h5,h6{
- font-family:'Architects Daughter', cursive,'Helvetica Neue',Helvetica,Arial,sans-serif
+ font-family:'Helvetica Neue',Helvetica,Arial,sans-serif
+ }
+
+.site-heading .subheading,{
+ font-family:'Architects Daughter', cursive, 'Helvetica Neue',Helvetica,Arial,sans-serif
  }
  
  p{
