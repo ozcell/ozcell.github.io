@@ -1,5 +1,5 @@
 /** Contain overflow in all browsers. */
-pre { overflow: auto; }
+pre { overflow: scroll; }
 
 /** Address odd `em`-unit font size rendering in all browsers. */
 code, kbd, pre, samp { font-family: monospace, monospace; font-size: 1em; }
