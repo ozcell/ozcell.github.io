@@ -43,7 +43,7 @@ blockquote {
   font-style: italic;
 }
 pre {
-  overflow: auto;
+  overflow: scroll;
   background-color: transparent;
   font-size: 12px;
   font-family: 'Source Code Pro', monospace;
