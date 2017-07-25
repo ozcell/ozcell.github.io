@@ -249,14 +249,6 @@ f\big(\boldsymbol{X}\big) =
 \boldsymbol{Y} =<br>
 softmax\big(\boldsymbol{Z}\big)\boldsymbol{W}^{(L)}&nbsp;\]</p>
 <p>where $\boldsymbol{W}^{(L)}$ is an $n \times n_\psi$ matrix representing the constant weights between augmented softmax layer and pooling&nbsp;layer.</p>
-<p>\[
-\boldsymbol{W}^{(L)}=
-\begin{bmatrix}
-\boldsymbol{I}<em _psi="\psi">{n</em>} \
-\boldsymbol{I}<em _psi="\psi">{n</em>} \
-\vdots \
-\boldsymbol{I}<em _psi="\psi">{n</em>}
-\end{bmatrix}&nbsp;\]</p>
 <p>and simply sums up the output probabilities of the softmax nodes belonging to the same pseudo-class. Since the output of the augmented softmax layer is already normalized, no additional averaging is needed at the pooling layer and summation alone is sufficient to calculate final pseudo-class probabilities. 
 Also, unsupervised regularization $\mathcal{U}(.)$ is applied to $\boldsymbol{B}$ to penalize the range of its distribution.
 The overall objective function of the training then&nbsp;becomes</p>
