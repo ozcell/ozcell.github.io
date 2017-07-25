@@ -136,6 +136,13 @@ div {
 }
 </style>
 
+<p><head>
+&#8230;
+    <script type="text/javascript"
+            src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+&#8230;
+</head></p>
 <p><a name="robustness"></a></p>
 <h3>Automatic Learning of Latent Annotations on Neural Networks with Auto-clustering Output Layer using Pseudo&nbsp;Parent-Classes</h3>
 <p><img src="/images/thumbs/robustness.png" width="400">
@@ -151,70 +158,50 @@ Our approach builds upon the previous study on learning of latent annotations on
 <p>Neural networks define a family of functions parameterized by weights and biases which define the relation between inputs and outputs. In multi-class categorization tasks, outputs correspond to class labels, hence in a typical output layer structure there exists an individual output node for each class. An activation function, such as softmax is then used to calculate normalized exponentials to convert the previous hidden layer&#8217;s activations, i.e. scores, into&nbsp;probabilities.</p>
 <p>Unlike traditional output layer structure, <span class="caps">ACOL</span> defines more than one softmax node ($k$ duplicates) per class (in this particular case, we prefer to use \textit{pseudo parent-class} term to emphasize that these classes are not expert-defined but automatically generated depending on random sampling). Outputs of $k$ duplicated softmax nodes that belong to the same pseudo parent are then combined in a subsequent pooling layer for the final prediction. Training is performed in the configuration shown in Figure~\ref{fig:clustering}. This might look like a classifier with redundant softmax nodes. However, duplicated softmax nodes of each pseudo parent are specialized due to dropout\cite{dropout} and the unsupervised regularization applied throughout the training in a way  that each one of $n=n_\psi k$ softmax nodes represents an individual sub-class of a pseudo parent, i.e. latent&nbsp;annotation.</p>
 <p>Consider a neural network with <span class="caps">ACOL</span> consisting of $L-1$ hidden layers where $l$ denotes the individual index for each layer such that $l \in {0,&#8230;,L}$. Let $\boldsymbol{Y} ^{(l)}$ denote the output of the nodes at layer $l$. $\boldsymbol{Y} ^{(0)}=\boldsymbol{X}$ is the input and $f(\boldsymbol{X})=f^{(L)}(\boldsymbol{X})=\boldsymbol{Y}^{(L)}=\boldsymbol{Y}$ is the output of the entire network. $\boldsymbol{W} ^{(l)}$ and $\boldsymbol{b}^{(l)}$ are the weights and biases of layer $l$, respectively. Then, the feedforward operation of the neural network can be written as 
-\begin{equation}
+[
 \label{neuralnetwork}
 f^{(l)}\big(\boldsymbol{X}\big) = 
 \boldsymbol{Y}^{(l)} = 
 h^{(l)}\big(\boldsymbol{Y}^{(l-1)}\boldsymbol{W}^{(l)} + \boldsymbol{b}^{(l)}\big)
-\end{equation}
+]
 where $h^{(l)}$(.) is the activation function applied at layer $l$. For the sake of clarity, let us specify the activities going into the augmented softmax layer of this network such that
-\begin{equation}
+[
 \boldsymbol{Z} := \boldsymbol{Y}^{(L-2)}\boldsymbol{W}^{(L-1)} + \boldsymbol{b}^{(L-1)}
-\end{equation}
+]
 and its positive part as $\boldsymbol{B}$ such that 
-\begin{equation}
+[
 g\big(\boldsymbol{X}\big) = \boldsymbol{B} := \max{\big(\boldsymbol{0}, \boldsymbol{Z}\big)}
-\end{equation}
+]
 both of which correspond to $m \times n$ matrices, where $n=n_\psi k$ and $k$ is the clustering coefficient of <span class="caps">ACOL</span> and chosen as 4 for this application.
 Then, the output of a neural network with <span class="caps">ACOL</span> can be written in terms of $\boldsymbol{Z}$ as 
-\begin{equation}
+[
 \label{acoloutput}
 f\big(\boldsymbol{X}\big) = 
 \boldsymbol{Y} =<br>
 h^{(L)}\bigg(h^{(L-1)}\big(\boldsymbol{Z}\big)\boldsymbol{W}^{(L)} + \boldsymbol{b}^{(L)}\bigg)
-\end{equation}
+]
 where $\boldsymbol{Y}$ is an $m \times n_\psi$ matrix in which $Y_{ij}$ is the probability of the $i$\textsuperscript{th} example belonging to the $j$\textsuperscript{th} pseudo parent. Since $h^{(L-1)}(.)$ and $h^{(L)}(.)$ respectively correspond to softmax and linear activation functions and $\boldsymbol{b}^{(L)} = \boldsymbol{0}$, then (\ref{acoloutput}) further simplifies into 
-\begin{equation}
+[
 f\big(\boldsymbol{X}\big) = 
 \boldsymbol{Y} =<br>
 \softmax\big(\boldsymbol{Z}\big)\boldsymbol{W}^{(L)}
-\end{equation}
+]
 where $\boldsymbol{W}^{(L)}$ is an $n \times n_\psi$ matrix representing the constant weights between augmented softmax layer and pooling layer.
-%\begin{equation}
-%\boldsymbol{W}^{(L)}=
-%\begin{bmatrix}
-%\boldsymbol{I}<em>{n</em>\psi} \
-%\boldsymbol{I}<em>{n</em>\psi} \
-%\vdots \
-%\boldsymbol{I}<em>{n</em>\psi}
-%\end{bmatrix}
-%\end{equation}
-%and simply sums up the output probabilities of the softmax nodes belonging to the same pseudo-class. Since the output of the augmented softmax layer is already normalized, no additional averaging is needed at the pooling layer and summation alone is sufficient to calculate final pseudo-class probabilities. 
 Also, unsupervised regularization $\mathcal{U}(.)$ is applied to $\boldsymbol{B}$ to penalize the range of its distribution.
 The overall objective function of the training then becomes
-\begin{equation}
+[
 \label{overallobj}
-%\mathcal{L}\big(f\big(\boldsymbol{X}\big), \boldsymbol{t}\big) + 
-%\mathcal{U}\big(g\big(\boldsymbol{X}\big)\big) = 
 \mathcal{L}\big(\boldsymbol{Y}, \boldsymbol{t}\big) +
 \mathcal{U}\big(\boldsymbol{B}\big) = 
-%\mathcal{L}\big(\boldsymbol{Y}, \boldsymbol{t}\big) +
-%c_R\sum\limits_{j=1}^{n}\bigg(\max\big(\boldsymbol{B}<em _j=",j">{:,j}\big)-\min\big(\boldsymbol{B}</em>\big)\bigg) = 
 \mathcal{L}\big(\softmax(\boldsymbol{Z})\boldsymbol{W}^{(L)}, \boldsymbol{t}\big) +
 c_R\sum\limits_{j=1}^{n}\bigg(\max\big(\boldsymbol{B}<em _j=",j">{:,j}\big)-\min\big(\boldsymbol{B}</em>\big)\bigg)
-\end{equation}
-where $\mathcal{L}(.)$ is the supervised log loss function, $\boldsymbol{t}=[t_1,&#8230;,t_{m}]^T$ is the vector of the provided pseudo parent labels such that $t_i \in {1,&#8230;,n_\psi}$, $\boldsymbol{B}_{:,j}$ corresponds to $j$\textsuperscript{th} column vector of matrix $\boldsymbol{B}$ and $c_R$ is the weighting coefficient.
-%Then, the supervised (in fact, pseudo-supervised) portion of the objective function becomes
-%\begin{equation}
-%\label{overallobj}
-%\mathcal{L}\big(f\big(\boldsymbol{X}\big), \boldsymbol{t}\big) = 
-%\mathcal{L}\big(\boldsymbol{Y}, \boldsymbol{t}\big) = 
-%\mathcal{L}\big(\softmax\big(\boldsymbol{Z}\big)\boldsymbol{W}^{(L)}, \boldsymbol{t}\big)&nbsp;%\end{equation}.</p>
+]
+where $\mathcal{L}(.)$ is the supervised log loss function, $\boldsymbol{t}=[t_1,&#8230;,t_{m}]^T$ is the vector of the provided pseudo parent labels such that $t_i \in {1,&#8230;,n_\psi}$, $\boldsymbol{B}_{:,j}$ corresponds to $j$\textsuperscript{th} column vector of matrix $\boldsymbol{B}$ and $c_R$ is the weighting&nbsp;coefficient.</p>
 <p>Training of the proposed framework is performed according to simultaneous supervised and unsupervised updates resulting from the objective function given in (\ref{overallobj}). We adopt stochastic gradient descent in the mini-batch mode \cite{bottou10sgd} for optimization. Algorithm 2 below describes the entire training procedure. Along with unsupervised regularization, dropout method \cite{dropout} is also applied to the augmented softmax layer to distribute the examples across the duplicated softmax nodes. For each mini-batch, an $1 \times n$ row vector $\boldsymbol{r}$ of independent Bernoulli random variables is sampled and multiplied element-wise with the output of the augmented softmax layer. This operation corresponds to dropping out each one of the $n$ softmax nodes with the probability of $p$ for that&nbsp;batch.</p>
 <p>After training phase is completed, network is simply truncated by completely disconnecting the pooling layer as shown in Figure~\ref{fig:clustering_red} and the rest of the network with trained weights is used to assign the annotations to each example. This assignment can be described as
-\begin{equation}
+[
 y_i :=  \argmax_{1\le j \le n}Z_{ij}
-\end{equation}
+]
 where $y_i$ is the annotation assigned to $i$\textsuperscript{th} example. Using the assigned annotations $\boldsymbol{y}$ and the metagenome labels $\boldsymbol{q}$, the similarity matrix $\boldsymbol{S}$ used to obtain the dendrogram provided in this article is constructed as shown in Algorithm 3. Since applying dropout to distribute the examples across the duplicated softmax nodes also introduces a variance to the assigned annotations, we take the average of the similarity matrices obtained during the last 20 epochs of the training. Moreover, to reduce the variance due to the random generation of the pseudo parent-classes, we repeat the entire procedure 100 times with a new selection of pseudo parents for each&nbsp;repetition.        </p>
     </article>
 
