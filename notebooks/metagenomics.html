@@ -64,29 +64,6 @@
             <meta name="twitter:description" content="Latent Annotation Learning on NNs with ACOL using Pseudo Parent-Classes">
     <link rel="icon" type="image/png" href="../theme/images/icons/favicon.png">
 	<link rel="icon" type="image/x-icon" href="../favicon.ico">
-  
-  <!-- Loading mathjax macro -->
-  <!-- Load mathjax -->
-    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
-    <!-- MathJax configuration -->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-            displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
-            processEscapes: true,
-            processEnvironments: true
-        },
-        // Center justify equations in code and markdown cells. Elsewhere
-        // we use CSS to left justify single line equations in code cells.
-        displayAlign: 'center',
-        "HTML-CSS": {
-            styles: {'.MathJax_Display': {"margin": 0}},
-            linebreaks: { automatic: true }
-        }
-    });
-    </script>
-  
     
 </head>
 
@@ -159,20 +136,73 @@ div {
 }
 </style>
 
-<p><a name="robustness"></a></p>
 <h3>Automatic Learning of Latent Annotations on Neural Networks with Auto-clustering Output Layer using Pseudo&nbsp;Parent-Classes</h3>
-<p><img src="/images/thumbs/robustness.png" width="400">
-Our approach builds upon the previous study on learning of latent annotations on neural networks using auto-clustering output layer (<span class="caps">ACOL</span>) when a coarse level of supervision is available for all observations, i.e. parent-class labels, but the model has to learn a deeper level of latent annotations, i.e. sub-classes, under each one of parents [Cite here]. <span class="caps">ACOL</span> is a novel output layer modification for deep neural networks to allow simultaneous supervised classification (per provided parent-classes) and unsupervised clustering (within each parent) where clustering is performed with a Graph-based Activity Regularization (<span class="caps">GAR</span>) technique recently proposed in \cite{Kilinc2017Gar}. More specifically, as <span class="caps">ACOL</span> duplicates the softmax nodes at the output layer for each class, <span class="caps">GAR</span> allows for competitive learning between these duplicates on a traditional error-correction learning&nbsp;framework. </p>
+<p>Our approach builds upon the previous study on learning of latent annotations on neural networks using auto-clustering output layer (<span class="caps">ACOL</span>) when a coarse level of supervision is available for all observations, i.e. parent-class labels, but the model has to learn a deeper level of latent annotations, i.e. sub-classes, under each one of parents [1]. <span class="caps">ACOL</span> is a novel output layer modification for deep neural networks to allow simultaneous supervised classification (per provided parent-classes) and unsupervised clustering (within each parent) where clustering is performed with a Graph-based Activity Regularization (<span class="caps">GAR</span>) technique recently proposed in [2]. More specifically, as <span class="caps">ACOL</span> duplicates the softmax nodes at the output layer for each class, <span class="caps">GAR</span> allows for competitive learning between these duplicates on a traditional error-correction learning&nbsp;framework. </p>
 <p>For this specific dataset, we modified <span class="caps">ACOL</span> to learn latent annotations in a fully unsupervised setup by substituting the real, yet unavailable, parent-class information with a pseudo one, i.e. randomly generated pseudo parent-classes. To generate examples for a pseudo parent-class, we choose a domain specific transformation to be applied to every sample in the dataset. The transformed dataset constitutes the examples of that pseudo parent-class and every new transformation - for this particular case the random sampling of codon positions - generates a new pseudo parent-class. Naturally, the main classification task performed over these pseudo parent-classes does not represent any meaningful knowledge about the data by itself. However, frequent and random selection of these pseudo parent-classes allow the <span class="caps">ACOL</span> neural network to learn sub-classes of these pseudo parents without bias. While each sub-class corresponds to a latent annotation which may or may not be meaningful, the combination of these annotations learned through abundant and concurrent clusterings reveals an unbiased and robust similarity metric between different&nbsp;metagenomes.</p>
-<p>Pseudo parent-class generation and similarity metric calculation are described thoroughly in the following subsections (or appendices) along with the details of model&nbsp;training.</p>
+<p>Pseudo parent-class generation and similarity metric calculation are described thoroughly in the following subsections along with the details of model&nbsp;training.</p>
+<h4>Installation</h4>
+<p>The proposed approach requires LALNets that uses Keras with Theano backend. To install LALNets and all&nbsp;dependencies:</p>
+<div class="highlight"><pre><span></span>pip install git+https://github.com/ozcell/LALNets.git
+</pre></div>
+
+
+<p>Following modules need to be&nbsp;imported:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">keras.optimizers</span> <span class="kn">import</span> <span class="n">SGD</span>
+
+<span class="kn">from</span> <span class="nn">lalnets.commons.datasets</span> <span class="kn">import</span> <span class="n">load_sar11</span>
+<span class="kn">from</span> <span class="nn">lalnets.commons.utils</span> <span class="kn">import</span> <span class="n">get_similarity_matrix</span>
+<span class="kn">from</span> <span class="nn">lalnets.acol.models</span> <span class="kn">import</span> <span class="n">define_mlp</span>
+<span class="kn">from</span> <span class="nn">lalnets.acol.trainings</span> <span class="kn">import</span> <span class="n">train_with_parents</span><span class="p">,</span> <span class="n">get_model_truncated</span>
+<span class="kn">from</span> <span class="nn">lalnets.metagenome.preprocessing</span> <span class="kn">import</span> <span class="n">get_pseudo_labels_mini</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1337</span><span class="p">)</span>  <span class="c1"># for reproducibility</span>
+</pre></div>
+
+
+<h4>Loading the&nbsp;Dataset</h4>
+<p>First, we load the dataset into Pandas&nbsp;dataframe. </p>
+<div class="highlight"><pre><span></span><span class="c1">#path of the dataset</span>
+<span class="n">loc</span> <span class="o">=</span> <span class="s1">&#39;./HIMB083-74stations-AA-20x-v15-799genes-dep-10&#39;</span>
+
+<span class="c1">#load the dataset</span>
+<span class="n">df</span><span class="p">,</span> <span class="n">sample_id_map</span> <span class="o">=</span> <span class="n">load_sar11</span><span class="p">(</span><span class="n">loc</span><span class="p">)</span>
+</pre></div>
+
+
 <h4>Pseudo parent-class&nbsp;generation</h4>
-<p>Consider an $ n_s \times n_p \times n_f $ metagenomics dataset represented by the 3-D tensor $ \mathbf{D} $, where $ n_s $ is the number of metagenomes to be clustered, $ n_p $ is the number of codon positions per metagenome and $ n_f $ is the number of features representing each codon position. Specifically, our dataset can be specified by a $ 74 \times 37,416 \times 2 $ tensor, as each codon position is represented by the two most frequent amino acids found in this&nbsp;position.</p>
-<p>To generate the examples of $ i^{th} $ pseudo parent-class, we randomly sample $ n_{\acute{p}} $ positions out of $ n_p $ with replacement. Resulting $ n_s \times n_{\acute{p}} \times n_f $ subsets which correspond to $ d=n_{\acute{p}}n_f $ dimensional $ n_s $ examples of pseudo parent-class $ i $. This procedure is repeated for $ n_\psi $ times, and ultimately we obtain an $ m \times d $ input matrix $ \boldsymbol{X} = [\boldsymbol{x}<em m>1,&#8230;,\boldsymbol{x}</em>]^T $ and corresponding pseudo parent-class labels $ \boldsymbol{t}=[t_1,&#8230;,t_{m}]^T $ to train a neural network, where $ n_\psi $ is the number of the pseudo parents and $ m $ is the total number of the examples generated in this procedure, such that $ m=n_\psi n_s&nbsp;$.</p>
+<p>Consider an $n_s \times n_p \times n_f$ metagenomics dataset represented by the 3-D tensor $\mathbf{D}$, where $n_s$ is the number of metagenomes to be clustered, $n_p$ is the number of codon positions per metagenome and $n_f$ is the number of features representing each codon position. Specifically, our dataset can be specified by a $74 \times 37,416 \times 2$ tensor, as each codon position is represented by the two most frequent amino acids found in this&nbsp;position.</p>
+<p>To generate the examples of $i^{th}$ pseudo parent-class, we randomly sample $n_{\acute{p}}$ positions out of $n_p$ with replacement. Resulting $n_s \times n_{\acute{p}} \times n_f$ subsets which correspond to $d=n_{\acute{p}}n_f$ dimensional $n_s$ examples of pseudo parent-class $i$. This procedure is repeated for $n_\psi$ times, and ultimately we obtain an $m \times d$ input matrix $\boldsymbol{X} = [\boldsymbol{x}<em m>1,&#8230;,\boldsymbol{x}</em>]^T$ and corresponding pseudo parent-class labels $\boldsymbol{t}=[t_1,&#8230;,t_{m}]^T$ to train a neural network, where $n_\psi$ is the number of the pseudo parents and $m$ is the total number of the examples generated in this procedure, such that $m=n_\psi&nbsp;n_s$.</p>
 <p>We select $n_{\acute{p}}=2000$ and $n_\psi=1000$ to produce the results in this article, therefore $\boldsymbol{X}$ is  $74000 \times 4000$ matrix where each one of 1000 pseudo parents is equally represented by 74 examples sampled from different metagenomes. We also keep track of the metagenome labels $\boldsymbol{q}=[q_1,&#8230;,q_{m}]^T$, indicating the source metagenome of every example. This information will be used later to produce the similarity&nbsp;matrix. </p>
-<p>Algorithm 1 below describes the entire sampling and pseudo parent-class generation&nbsp;procedure.</p>
-<h4>Learning Latent Annotations and Constructing the Similarity&nbsp;Matrix</h4>
+<div class="highlight"><pre><span></span><span class="c1">#dataset hyperparameters</span>
+<span class="c1">#number of metagenomes</span>
+<span class="n">n_s</span> <span class="o">=</span> <span class="mi">74</span> 
+<span class="c1">#number of positions to be sampled</span>
+<span class="n">n_p_acute</span> <span class="o">=</span> <span class="mi">2000</span> 
+<span class="c1">#number of features per position</span>
+<span class="n">n_f</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="c1">#number of dimensions of the input</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">n_p_acute</span><span class="o">*</span><span class="n">n_f</span>
+<span class="c1">#number of pseudo-classes </span>
+<span class="n">n_psi</span> <span class="o">=</span> <span class="mi">1000</span> 
+</pre></div>
+
+
+<p>Algorithm 1 below describes the entire sampling and pseudo parent-class generation&nbsp;procedure. </p>
+<p>[images/algorithm1]</p>
+<div class="highlight"><pre><span></span><span class="c1">#Algorithm 1: Pseudo-class generation</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">q</span> <span class="o">=</span> <span class="n">get_pseudo_labels_mini</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">n_s</span><span class="p">,</span> <span class="n">n_p_acute</span><span class="p">,</span> <span class="n">n_psi</span><span class="p">)</span>
+</pre></div>
+
+
+<h4>Learning Latent&nbsp;Annotations</h4>
 <p>Neural networks define a family of functions parameterized by weights and biases which define the relation between inputs and outputs. In multi-class categorization tasks, outputs correspond to class labels, hence in a typical output layer structure there exists an individual output node for each class. An activation function, such as softmax is then used to calculate normalized exponentials to convert the previous hidden layer&#8217;s activations, i.e. scores, into&nbsp;probabilities.</p>
-<p>Unlike traditional output layer structure, <span class="caps">ACOL</span> defines more than one softmax node ($k$ duplicates) per class (in this particular case, we prefer to use \textit{pseudo parent-class} term to emphasize that these classes are not expert-defined but automatically generated depending on random sampling). Outputs of $k$ duplicated softmax nodes that belong to the same pseudo parent are then combined in a subsequent pooling layer for the final prediction. Training is performed in the configuration shown in Figure~\ref{fig:clustering}. This might look like a classifier with redundant softmax nodes. However, duplicated softmax nodes of each pseudo parent are specialized due to dropout\cite{dropout} and the unsupervised regularization applied throughout the training in a way  that each one of $n=n_\psi k$ softmax nodes represents an individual sub-class of a pseudo parent, i.e. latent&nbsp;annotation.</p>
+<p>Unlike traditional output layer structure, <span class="caps">ACOL</span> defines more than one softmax node ($k$ duplicates) per class (in this particular case, we prefer to use &#8220;pseudo parent-class&#8221; term to emphasize that these classes are not expert-defined but automatically generated depending on random sampling). Outputs of $k$ duplicated softmax nodes that belong to the same pseudo parent are then combined in a subsequent pooling layer for the final prediction. Training is performed in the configuration shown in Figure~\ref{[images/schema_acol]}. This might look like a classifier with redundant softmax nodes. However, duplicated softmax nodes of each pseudo parent are specialized due to dropout [3] and the unsupervised regularization applied throughout the training in a way  that each one of $n=n_\psi k$ softmax nodes represents an individual sub-class of a pseudo parent, i.e. latent&nbsp;annotation.</p>
+<p>[images/schema_acol]</p>
 <p>Consider a neural network with <span class="caps">ACOL</span> consisting of $L-1$ hidden layers where $l$ denotes the individual index for each layer such that $l \in {0,&#8230;,L}$. Let $\boldsymbol{Y} ^{(l)}$ denote the output of the nodes at layer $l$. $\boldsymbol{Y} ^{(0)}=\boldsymbol{X}$ is the input and $f(\boldsymbol{X})=f^{(L)}(\boldsymbol{X})=\boldsymbol{Y}^{(L)}=\boldsymbol{Y}$ is the output of the entire network. $\boldsymbol{W} ^{(l)}$ and $\boldsymbol{b}^{(l)}$ are the weights and biases of layer $l$, respectively. Then, the feedforward operation of the neural network can be written&nbsp;as </p>
 <p>\begin{equation}
 f^{(l)}\big(\boldsymbol{X}\big) = 
@@ -190,7 +220,7 @@ Then, the output of a neural network with <span class="caps">ACOL</span> can be 
 f\big(\boldsymbol{X}\big) = 
 \boldsymbol{Y} =<br>
 h^{(L)}\bigg(h^{(L-1)}\big(\boldsymbol{Z}\big)\boldsymbol{W}^{(L)} + \boldsymbol{b}^{(L)}\bigg)&nbsp;\end{equation}</p>
-<p>where $\boldsymbol{Y}$ is an $m \times n_\psi$ matrix in which $Y_{ij}$ is the probability of the $i$\textsuperscript{th} example belonging to the $j$\textsuperscript{th} pseudo parent. Since $h^{(L-1)}(.)$ and $h^{(L)}(.)$ respectively correspond to softmax and linear activation functions and $\boldsymbol{b}^{(L)} = \boldsymbol{0}$, then (\ref{acoloutput}) further simplifies&nbsp;into </p>
+<p>where $\boldsymbol{Y}$ is an $m \times n_\psi$ matrix in which $Y_{ij}$ is the probability of the $i^{th}$ example belonging to the $j^{th}$ pseudo parent. Since $h^{(L-1)}(.)$ and $h^{(L)}(.)$ respectively correspond to softmax and linear activation functions and $boldsymbol{b}^{(L)} = \boldsymbol{0}$, then this expression further simplifies&nbsp;into </p>
 <p>\begin{equation}
 f\big(\boldsymbol{X}\big) = 
 \boldsymbol{Y} =<br>
@@ -211,9 +241,241 @@ The overall objective function of the training then&nbsp;becomes</p>
 \mathcal{L}\big(\boldsymbol{Y}, \boldsymbol{t}\big) +
 \mathcal{U}\big(\boldsymbol{B}\big) = 
 \mathcal{L}\big(softmax(\boldsymbol{Z})\boldsymbol{W}^{(L)}, \boldsymbol{t}\big) +
-c_R\sum\limits_{j=1}^{n}\bigg(\max\big(\boldsymbol{B}<em _j=",j">{:,j}\big)-\min\big(\boldsymbol{B}</em>\big)\bigg)&nbsp;\end{equation}</p>
-<p>where $\mathcal{L}(.)$ is the supervised log loss function, $\boldsymbol{t}=[t_1,&#8230;,t_{m}]^T$ is the vector of the provided pseudo parent labels such that $t_i \in {1,&#8230;,n_\psi}$, $\boldsymbol{B}_{:,j}$ corresponds to $j$\textsuperscript{th} column vector of matrix $\boldsymbol{B}$ and $c_R$ is the weighting&nbsp;coefficient.</p>
-<p>Training of the proposed framework is performed according to simultaneous supervised and unsupervised updates resulting from the objective function given in (\ref{overallobj}). We adopt stochastic gradient descent in the mini-batch mode \cite{bottou10sgd} for optimization. Algorithm 2 below describes the entire training procedure. Along with unsupervised regularization, dropout method \cite{dropout} is also applied to the augmented softmax layer to distribute the examples across the duplicated softmax nodes. For each mini-batch, an $1 \times n$ row vector $\boldsymbol{r}$ of independent Bernoulli random variables is sampled and multiplied element-wise with the output of the augmented softmax layer. This operation corresponds to dropping out each one of the $n$ softmax nodes with the probability of $p$ for that&nbsp;batch.       </p>
+c_R\sum\limits_{j=1}^{n}\bigg(\max\big(\boldsymbol{B}<em _j=",j">{:,j}\big)-\min\big(\boldsymbol{B}</em>\big)\bigg)
+\end{equation}
+where $\mathcal{L}(.)$ is the supervised log loss function, $\boldsymbol{t}=[t_1,&#8230;,t_{m}]^T$ is the vector of the provided pseudo parent labels such that $t_i \in {1,&#8230;,n_\psi}$, $\boldsymbol{B}_{:,j}$ corresponds to $j^{th}$ column vector of matrix $\boldsymbol{B}$ and $c_R$ is the weighting&nbsp;coefficient. </p>
+<p>We employ a neural network with 3 hidden layers of 2048&nbsp;nodes,</p>
+<div class="highlight"><pre><span></span><span class="c1">#NN hyperparameters</span>
+<span class="c1">#number of hidden layers, number of nodes per layer </span>
+<span class="n">mlp_params</span> <span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2048</span><span class="p">)</span>
+</pre></div>
+
+
+<p>and choose <span class="caps">ACOL</span> hyperparameters as&nbsp;follows:</p>
+<div class="highlight"><pre><span></span><span class="c1">#ACOL hyperparameters</span>
+<span class="c1">#clustering coeffient of ACOL</span>
+<span class="n">k</span> <span class="o">=</span> <span class="mi">4</span> 
+<span class="c1">#dropout ratio to be applied to augmented softmax layer</span>
+<span class="n">p</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="c1">#weighting coeffient of the unsupervised regularization</span>
+<span class="n">c_R</span> <span class="o">=</span> <span class="mf">0.00001</span>
+</pre></div>
+
+
+<p>Training of the newwork is performed according to simultaneous supervised and unsupervised updates resulting from the objective function given above. We adopt stochastic gradient descent in the mini-batch mode [4] for&nbsp;optimization.</p>
+<div class="highlight"><pre><span></span><span class="c1">#define optimizer</span>
+<span class="n">sgd</span> <span class="o">=</span> <span class="n">SGD</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">decay</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">nesterov</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>   
+</pre></div>
+
+
+<p>Algorithm 2 below describes the entire training procedure. Along with unsupervised regularization, dropout method [3] is also applied to the augmented softmax layer to distribute the examples across the duplicated softmax nodes. For each mini-batch, an $1 \times n$ row vector $\boldsymbol{r}$ of independent Bernoulli random variables is sampled and multiplied element-wise with the output of the augmented softmax layer. This operation corresponds to dropping out each one of the $n$ softmax nodes with the probability of $p$ for that&nbsp;batch.  </p>
+<p>[images/algorithm2]</p>
+<div class="highlight"><pre><span></span><span class="c1">#Algorithm 2: Model training for 100 epochs</span>
+<span class="n">metrics</span><span class="p">,</span> <span class="n">acti</span><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="n">train_with_parents</span><span class="p">(</span><span class="n">nb_parents</span> <span class="o">=</span> <span class="n">n_psi</span><span class="p">,</span> 
+                                          <span class="n">nb_clusters_per_parent</span> <span class="o">=</span> <span class="n">k</span><span class="p">,</span>
+                                          <span class="n">define_model</span> <span class="o">=</span> <span class="n">define_mlp</span><span class="p">,</span> 
+                                          <span class="n">model_params</span> <span class="o">=</span> <span class="n">model_params</span><span class="p">,</span> 
+                                          <span class="n">optimizer</span> <span class="o">=</span> <span class="n">sgd</span><span class="p">,</span>
+                                          <span class="n">X_train</span> <span class="o">=</span> <span class="n">X</span><span class="p">,</span> 
+                                          <span class="n">y_train</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> 
+                                          <span class="n">y_train_parent</span> <span class="o">=</span> <span class="n">t</span><span class="p">,</span> 
+                                          <span class="n">X_test</span> <span class="o">=</span> <span class="n">X</span><span class="p">,</span> 
+                                          <span class="n">y_test</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> 
+                                          <span class="n">y_test_parent</span> <span class="o">=</span> <span class="n">t</span><span class="p">,</span>
+                                          <span class="n">nb_reruns</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> 
+                                          <span class="n">nb_epoch</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> 
+                                          <span class="n">nb_dpoints</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> 
+                                          <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">128</span><span class="p">,</span>
+                                          <span class="n">test_on_test_set</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span> 
+                                          <span class="n">update_c3</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                                          <span class="n">return_model</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+                                          <span class="n">save_after_each_rerun</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                                          <span class="n">model_in</span><span class="o">=</span><span class="bp">None</span>
+                                          <span class="p">)</span>
+</pre></div>
+
+
+<p>After training phase is completed, network is simply truncated by completely disconnecting the pooling layer as shown&nbsp;below.</p>
+<p>[images/schema_red]</p>
+<p>The rest of the network with trained weights is used to assign the annotations to each example. This assignment can be described&nbsp;as</p>
+<p>\begin{equation}
+y_i :=  argmax_{1\le j \le n}Z_{ij}&nbsp;\end{equation}</p>
+<p>where $y_i$ is the annotation assigned to $i^{th}$&nbsp;example. </p>
+<div class="highlight"><pre><span></span><span class="c1">#get assigned annotations</span>
+<span class="n">model_truncated</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_model_truncated</span><span class="p">(</span><span class="n">define_mlp</span><span class="p">,</span> <span class="n">model_params</span><span class="p">,</span> <span class="n">n_psi</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">model_truncated</span><span class="o">.</span><span class="n">predict_classes</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Using the assigned annotations $\boldsymbol{y}$ and the metagenome labels $\boldsymbol{q}$, the similarity matrix $\boldsymbol{S}$ used to obtain the dendrogram provided in this article is constructed as shown in Algorithm&nbsp;3.</p>
+<p>[images/algorithm3]</p>
+<div class="highlight"><pre><span></span><span class="c1">#Algorithm 3: Obtaining similarity matrix</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">S</span> <span class="o">=</span> <span class="n">get_similarity_matrix</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n_psi</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Since applying dropout to distribute the examples across the duplicated softmax nodes also introduces a variance to the assigned annotations, we take the average of the similarity matrices obtained during the last 20 epochs of the training. Moreover, to reduce the variance due to the random generation of the pseudo parent-classes, we repeat the entire procedure 100 times with a new selection of pseudo parents for each&nbsp;repetition. </p>
+<div class="highlight"><pre><span></span><span class="c1">#Averaging hyperparameters for variance reduction </span>
+<span class="c1">#number of epochs whose results to be averaged</span>
+<span class="n">n_avg</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="c1">#number of retrainings</span>
+<span class="n">n_exp</span> <span class="o">=</span> <span class="mi">100</span>      
+</pre></div>
+
+
+<h4>Putting it All&nbsp;Together</h4>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">keras.optimizers</span> <span class="kn">import</span> <span class="n">SGD</span>
+
+<span class="kn">from</span> <span class="nn">lalnets.commons.datasets</span> <span class="kn">import</span> <span class="n">load_sar11</span>
+<span class="kn">from</span> <span class="nn">lalnets.commons.utils</span> <span class="kn">import</span> <span class="n">get_similarity_matrix</span>
+<span class="kn">from</span> <span class="nn">lalnets.acol.models</span> <span class="kn">import</span> <span class="n">define_mlp</span>
+<span class="kn">from</span> <span class="nn">lalnets.acol.trainings</span> <span class="kn">import</span> <span class="n">train_with_parents</span><span class="p">,</span> <span class="n">get_model_truncated</span>
+<span class="kn">from</span> <span class="nn">lalnets.metagenome.preprocessing</span> <span class="kn">import</span> <span class="n">get_pseudo_labels_mini</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1337</span><span class="p">)</span>  <span class="c1"># for reproducibility</span>
+
+<span class="c1">#path of the dataset</span>
+<span class="n">loc</span> <span class="o">=</span> <span class="s1">&#39;./HIMB083-74stations-AA-20x-v15-799genes-dep-10&#39;</span>
+
+<span class="c1">#load the dataset</span>
+<span class="n">df</span><span class="p">,</span> <span class="n">sample_id_map</span> <span class="o">=</span> <span class="n">load_sar11</span><span class="p">(</span><span class="n">loc</span><span class="p">)</span>
+
+<span class="c1">#dataset hyperparameters</span>
+<span class="c1">#number of metagenomes</span>
+<span class="n">n_s</span> <span class="o">=</span> <span class="mi">74</span> 
+<span class="c1">#number of positions to be sampled</span>
+<span class="n">n_p_acute</span> <span class="o">=</span> <span class="mi">2000</span> 
+<span class="c1">#number of features per position</span>
+<span class="n">n_f</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="c1">#number of dimensions of the input</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">n_p_acute</span><span class="o">*</span><span class="n">n_f</span>
+<span class="c1">#number of pseudo-classes </span>
+<span class="n">n_psi</span> <span class="o">=</span> <span class="mi">1000</span> 
+
+<span class="c1">#NN hyperparameters</span>
+<span class="c1">#number of hidden layers, number of nodes per layer </span>
+<span class="n">mlp_params</span> <span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2048</span><span class="p">)</span>
+
+<span class="c1">#ACOL hyperparameters</span>
+<span class="c1">#clustering coeffient of ACOL</span>
+<span class="n">k</span> <span class="o">=</span> <span class="mi">4</span> 
+<span class="c1">#dropout ratio to be applied to augmented softmax layer</span>
+<span class="n">p</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="c1">#weighting coeffient of the unsupervised regularization</span>
+<span class="n">c_R</span> <span class="o">=</span> <span class="mf">0.00001</span>
+
+<span class="c1">#define model</span>
+<span class="n">acol_params</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">c_R</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;average&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+<span class="n">model_params</span> <span class="o">=</span> <span class="p">((</span><span class="n">d</span><span class="p">,),</span> <span class="n">n_psi</span><span class="p">,</span> <span class="n">mlp_params</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">),</span> <span class="bp">True</span><span class="p">,</span> <span class="n">acol_params</span><span class="p">)</span>
+
+<span class="c1">#define optimizer</span>
+<span class="n">sgd</span> <span class="o">=</span> <span class="n">SGD</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">decay</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">nesterov</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>   
+
+<span class="c1">#Averaging hyperparameters for variance reduction </span>
+<span class="c1">#number of epochs whose results to be averaged</span>
+<span class="n">n_avg</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="c1">#number of retrainings</span>
+<span class="n">n_exp</span> <span class="o">=</span> <span class="mi">100</span>      
+<span class="c1"># initialize similarity matrices</span>
+<span class="n">S_avg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_s</span><span class="p">,</span> <span class="n">n_s</span><span class="p">,</span> <span class="n">n_avg</span><span class="p">))</span>
+<span class="n">S_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_s</span><span class="p">,</span> <span class="n">n_s</span><span class="p">,</span> <span class="n">n_exp</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">exp</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_exp</span><span class="p">):</span>
+
+    <span class="c1">#Algorithm 1: Pseudo-class generation</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">q</span> <span class="o">=</span> <span class="n">get_pseudo_labels_mini</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">n_s</span><span class="p">,</span> <span class="n">n_p_acute</span><span class="p">,</span> <span class="n">n_psi</span><span class="p">)</span>
+
+    <span class="c1">#Algorithm 2: Model training for 100 epochs</span>
+    <span class="n">metrics</span><span class="p">,</span> <span class="n">acti</span><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="n">train_with_parents</span><span class="p">(</span><span class="n">nb_parents</span> <span class="o">=</span> <span class="n">n_psi</span><span class="p">,</span> 
+                                              <span class="n">nb_clusters_per_parent</span> <span class="o">=</span> <span class="n">k</span><span class="p">,</span>
+                                              <span class="n">define_model</span> <span class="o">=</span> <span class="n">define_mlp</span><span class="p">,</span> 
+                                              <span class="n">model_params</span> <span class="o">=</span> <span class="n">model_params</span><span class="p">,</span> 
+                                              <span class="n">optimizer</span> <span class="o">=</span> <span class="n">sgd</span><span class="p">,</span>
+                                              <span class="n">X_train</span> <span class="o">=</span> <span class="n">X</span><span class="p">,</span> 
+                                              <span class="n">y_train</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> 
+                                              <span class="n">y_train_parent</span> <span class="o">=</span> <span class="n">t</span><span class="p">,</span> 
+                                              <span class="n">X_test</span> <span class="o">=</span> <span class="n">X</span><span class="p">,</span> 
+                                              <span class="n">y_test</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> 
+                                              <span class="n">y_test_parent</span> <span class="o">=</span> <span class="n">t</span><span class="p">,</span>
+                                              <span class="n">nb_reruns</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> 
+                                              <span class="n">nb_epoch</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> 
+                                              <span class="n">nb_dpoints</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> 
+                                              <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">128</span><span class="p">,</span>
+                                              <span class="n">test_on_test_set</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span> 
+                                              <span class="n">update_c3</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                                              <span class="n">return_model</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+                                              <span class="n">save_after_each_rerun</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                                              <span class="n">model_in</span><span class="o">=</span><span class="bp">None</span>
+                                              <span class="p">)</span>
+
+    <span class="c1">#train the model for n_avg more epochs</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_avg</span><span class="p">):</span>
+        <span class="c1">#Algorithm 2: Model training for 1 epoch</span>
+        <span class="n">metrics</span><span class="p">,</span> <span class="n">acti</span><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="n">train_with_parents</span><span class="p">(</span><span class="n">nb_parents</span> <span class="o">=</span> <span class="n">n_psi</span><span class="p">,</span> 
+                                                  <span class="n">nb_clusters_per_parent</span> <span class="o">=</span> <span class="n">k</span><span class="p">,</span>
+                                                  <span class="n">define_model</span> <span class="o">=</span> <span class="n">define_mlp</span><span class="p">,</span> 
+                                                  <span class="n">model_params</span> <span class="o">=</span> <span class="n">model_params</span><span class="p">,</span> 
+                                                  <span class="n">optimizer</span> <span class="o">=</span> <span class="n">sgd</span><span class="p">,</span>
+                                                  <span class="n">X_train</span> <span class="o">=</span> <span class="n">X</span><span class="p">,</span> 
+                                                  <span class="n">y_train</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> 
+                                                  <span class="n">y_train_parent</span> <span class="o">=</span> <span class="n">t</span><span class="p">,</span> 
+                                                  <span class="n">X_test</span> <span class="o">=</span> <span class="n">X</span><span class="p">,</span> 
+                                                  <span class="n">y_test</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> 
+                                                  <span class="n">y_test_parent</span> <span class="o">=</span> <span class="n">t</span><span class="p">,</span>
+                                                  <span class="n">nb_reruns</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> 
+                                                  <span class="n">nb_epoch</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> 
+                                                  <span class="n">nb_dpoints</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> 
+                                                  <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">128</span><span class="p">,</span>
+                                                  <span class="n">test_on_test_set</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> 
+                                                  <span class="n">update_c3</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                                                  <span class="n">return_model</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+                                                  <span class="n">save_after_each_rerun</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                                                  <span class="n">model_in</span><span class="o">=</span><span class="n">model</span>
+                                                  <span class="p">)</span>
+
+        <span class="c1">#get assigned annotations</span>
+        <span class="n">model_truncated</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_model_truncated</span><span class="p">(</span><span class="n">define_mlp</span><span class="p">,</span> <span class="n">model_params</span><span class="p">,</span> <span class="n">n_psi</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">model_truncated</span><span class="o">.</span><span class="n">predict_classes</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1">#Algorithm 3: Obtaining similarity matrix</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">S</span> <span class="o">=</span> <span class="n">get_similarity_matrix</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n_psi</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="n">S_avg</span><span class="p">[:,:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">S</span>
+
+    <span class="c1">#take the average of the similarity matrices obtained during last n_avg epochs</span>
+    <span class="n">S_all</span><span class="p">[:,:,</span><span class="n">exp</span><span class="p">]</span> <span class="o">=</span> <span class="n">S_avg</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1">#take the average of all similarity matrices obtained in n_exp retrainings </span>
+<span class="n">S</span> <span class="o">=</span> <span class="n">S_all</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df_S</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">sample_id_map</span><span class="p">)</span>
+<span class="n">df_S</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;S_deep_learning.csv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<h4>Running the&nbsp;Code</h4>
+<p>When Cuda enabled <span class="caps">GPU</span> is&nbsp;available </p>
+<div class="highlight"><pre><span></span><span class="nv">THEANO_FLAGS</span><span class="o">=</span><span class="nv">mode</span><span class="o">=</span>FAST_RUN,device<span class="o">=</span>gpu,lib.cnmem<span class="o">=</span>0.95,floatX<span class="o">=</span>float32 python acol_pseudo_sar11.py
+</pre></div>
+
+
+<p>otherwise</p>
+<div class="highlight"><pre><span></span><span class="nv">THEANO_FLAGS</span><span class="o">=</span><span class="nv">mode</span><span class="o">=</span>FAST_RUN,device<span class="o">=</span>cpu,lib.cnmem<span class="o">=</span>0.95,floatX<span class="o">=</span>float32 python acol_pseudo_sar11.py
+</pre></div>
+
+
+<h4>References</h4>
+<p>[1] O. Kilinc and I. Uysal, Automatic Learning of Latent Annotations in Neural Networks using Auto-Clusterin Output&nbsp;Layer</p>
+<p>[2] O. Kilinc and I. Uysal, <span class="caps">GAR</span>: an efficient and scalable graph-based activity regularization
+for semi-supervised learning,&#8221; CoRR, vol. abs/1705.07219, 2017. [Online]. Available: http:&nbsp;//arxiv.org/abs/1705.07219</p>
+<p>[3] N. Srivastava, <span class="caps">G. E.</span> Hinton, A. Krizhevsky, I. Sutskever, and R. Salakhutdinov, \Dropout: a simple way
+to prevent neural networks from overfitting,&#8221; Journal of Machine Learning Research, vol. 15, no. 1, pp.
+1929{1958, 2014. [Online]. Available:&nbsp;http://dl.acm.org/citation.cfm?id=2670313</p>
+<p>[4] L. Bottou, \Large-scale machine learning with stochastic gradient descent,&#8221; in Proceedings of <span class="caps">COMP</span>-
+<span class="caps">STAT</span>&#8216;2010. Springer, 2010, pp.&nbsp;177{186.</p>
     </article>
 
         <div class="tags">
