@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+            <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+        <title><span class="caps">ACOL</span>&nbsp;Pseudo</title>
+
+        <!-- Bootstrap Core CSS -->
+        <link href="../theme/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link href="../theme/css/clean-blog.min.css" rel="stylesheet">
+
+        <!-- Code highlight color scheme -->
+            <link href="../theme/css/code_blocks/tomorrow.css" rel="stylesheet">
+
+            <!-- CSS specified by the user -->
+            <link href="../clean-blog.css" rel="stylesheet">
+
+        <!-- Custom Fonts -->
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+		<link href="https://fonts.googleapis.com/css?family=Architects+Daughter" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+
+
+        <meta name="description" content="Latent Annotation Learning on NNs with ACOL using Pseudo Parent-Classes">
+
+        <meta name="author" content="Ozsel Kilinc">
+
+        <meta name="tags" content="ACOL">
+        <meta name="tags" content="latent annotations">
+        <meta name="tags" content="pseudo parent-classes">
+        <meta name="tags" content="genomics">
+
+	                <meta property="og:locale" content="">
+		<meta property="og:site_name" content="ozselKilinc">
+
+	<meta property="og:type" content="article">
+            <meta property="article:author" content="../author/ozsel-kilinc.html">
+	<meta property="og:url" content="../notebooks/metagenomics.html">
+	<meta property="og:title" content="<span class="caps">ACOL</span>&nbsp;Pseudo">
+	<meta property="article:published_time" content="2017-07-25 18:12:00-04:00">
+            <meta property="og:description" content="Latent Annotation Learning on NNs with ACOL using Pseudo Parent-Classes">
+
+            <meta property="og:image" content="../theme/images/post-bg.jpg">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@ozselkilinc">
+        <meta name="twitter:title" content="<span class="caps">ACOL</span>&nbsp;Pseudo">
+
+            <meta name="twitter:image" content="../theme/images/post-bg.jpg">
+
+            <meta name="twitter:description" content="Latent Annotation Learning on NNs with ACOL using Pseudo Parent-Classes">
+    <link rel="icon" type="image/png" href="../theme/images/icons/favicon.png">
+	<link rel="icon" type="image/x-icon" href="../favicon.ico">
+    
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- put icon <a class="navbar-brand" href="../">  
+                <img border="0" alt="ok" src="../theme/images/icons/favicon.png" 
+                width="32" height="32"></a> -->
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/pages/publications">Publications</a></li>
+                        <li><a href="/pages/notebooks">Notebooks</a></li>
+                        <li><a href="/pages/codes">Codes</a></li>
+                        <li><a href="/pages/contact">Contact</a></li>
+
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Header -->
+        <header class="intro-header" style="background-image: url('../theme/images/post-bg.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1><span class="caps">ACOL</span>&nbsp;Pseudo</h1>
+                        <span class="meta">Posted by
+                                <a href="../author/ozsel-kilinc.html">Ozsel Kilinc</a>
+                             on Tue 25 July 2017
+                        </span>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+    <!-- Post Content -->
+    <article>
+        <style>
+img {
+    float: left;
+}
+
+div {
+    text-align: justify;
+    text-justify: inter-word;
+}
+</style>
+
+<p><a name="robustness"></a></p>
+<h3>Automatic Learning of Latent Annotations on Neural Networks with Auto-clustering Output Layer using Pseudo&nbsp;Parent-Classes</h3>
+<p><img src="/images/thumbs/robustness.png" width="400">
+Our approach builds upon the previous study on learning of latent annotations on neural networks using auto-clustering output layer (<span class="caps">ACOL</span>) when a coarse level of supervision is available for all observations, i.e. parent-class labels, but the model has to learn a deeper level of latent annotations, i.e. sub-classes, under each one of parents [Cite here]. <span class="caps">ACOL</span> is a novel output layer modification for deep neural networks to allow simultaneous supervised classification (per provided parent-classes) and unsupervised clustering (within each parent) where clustering is performed with a Graph-based Activity Regularization (<span class="caps">GAR</span>) technique recently proposed in \cite{Kilinc2017Gar}. More specifically, as <span class="caps">ACOL</span> duplicates the softmax nodes at the output layer for each class, <span class="caps">GAR</span> allows for competitive learning between these duplicates on a traditional error-correction learning&nbsp;framework. </p>
+<p>For this specific dataset, we modified <span class="caps">ACOL</span> to learn latent annotations in a fully unsupervised setup by substituting the real, yet unavailable, parent-class information with a pseudo one, i.e. randomly generated pseudo parent-classes. To generate examples for a pseudo parent-class, we choose a domain specific transformation to be applied to every sample in the dataset. The transformed dataset constitutes the examples of that pseudo parent-class and every new transformation - for this particular case the random sampling of codon positions - generates a new pseudo parent-class. Naturally, the main classification task performed over these pseudo parent-classes does not represent any meaningful knowledge about the data by itself. However, frequent and random selection of these pseudo parent-classes allow the <span class="caps">ACOL</span> neural network to learn sub-classes of these pseudo parents without bias. While each sub-class corresponds to a latent annotation which may or may not be meaningful, the combination of these annotations learned through abundant and concurrent clusterings reveals an unbiased and robust similarity metric between different&nbsp;metagenomes.</p>
+<p>Pseudo parent-class generation and similarity metric calculation are described thoroughly in the following subsections (or appendices) along with the details of model&nbsp;training.</p>
+<h4>Pseudo parent-class&nbsp;generation</h4>
+<p>Consider an $n_s \times n_p \times n_f$ metagenomics dataset represented by the 3-D tensor $\mathbf{D}$, where $n_s$ is the number of metagenomes to be clustered, $n_p$ is the number of codon positions per metagenome and $n_f$ is the number of features representing each codon position. Specifically, our dataset can be specified by a $74 \times 37,416 \times 2$ tensor, as each codon position is represented by the two most frequent amino acids found in this&nbsp;position.</p>
+<p>To generate the examples of $i$\textsuperscript{th} pseudo parent-class, we randomly sample $n_{\acute{p}}$ positions out of $n_p$ with replacement. Resulting $n_s \times n_{\acute{p}} \times n_f$ subsets which correspond to $d=n_{\acute{p}}n_f$ dimensional $n_s$ examples of pseudo parent-class $i$. This procedure is repeated for $n_\psi$ times, and ultimately we obtain an $m \times d$ input matrix $\boldsymbol{X} = [\boldsymbol{x}<em m>1,&#8230;,\boldsymbol{x}</em>]^T$ and corresponding pseudo parent-class labels $\boldsymbol{t}=[t_1,&#8230;,t_{m}]^T$ to train a neural network, where $n_\psi$ is the number of the pseudo parents and $m$ is the total number of the examples generated in this procedure, such that $m=n_\psi&nbsp;n_s$.</p>
+<p>We select $n_{\acute{p}}=2000$ and $n_\psi=1000$ to produce the results in this article, therefore $\boldsymbol{X}$ is  $74000 \times 4000$ matrix where each one of 1000 pseudo parents is equally represented by 74 examples sampled from different metagenomes. We also keep track of the metagenome labels $\boldsymbol{q}=[q_1,&#8230;,q_{m}]^T$, indicating the source metagenome of every example. This information will be used later to produce the similarity&nbsp;matrix. </p>
+<p>Algorithm 1 below describes the entire sampling and pseudo parent-class generation&nbsp;procedure.</p>
+<h4>Learning Latent Annotations and Constructing the Similarity&nbsp;Matrix</h4>
+<p>Neural networks define a family of functions parameterized by weights and biases which define the relation between inputs and outputs. In multi-class categorization tasks, outputs correspond to class labels, hence in a typical output layer structure there exists an individual output node for each class. An activation function, such as softmax is then used to calculate normalized exponentials to convert the previous hidden layer&#8217;s activations, i.e. scores, into&nbsp;probabilities.</p>
+<p>Unlike traditional output layer structure, <span class="caps">ACOL</span> defines more than one softmax node ($k$ duplicates) per class (in this particular case, we prefer to use \textit{pseudo parent-class} term to emphasize that these classes are not expert-defined but automatically generated depending on random sampling). Outputs of $k$ duplicated softmax nodes that belong to the same pseudo parent are then combined in a subsequent pooling layer for the final prediction. Training is performed in the configuration shown in Figure~\ref{fig:clustering}. This might look like a classifier with redundant softmax nodes. However, duplicated softmax nodes of each pseudo parent are specialized due to dropout\cite{dropout} and the unsupervised regularization applied throughout the training in a way  that each one of $n=n_\psi k$ softmax nodes represents an individual sub-class of a pseudo parent, i.e. latent&nbsp;annotation.</p>
+<p>Consider a neural network with <span class="caps">ACOL</span> consisting of $L-1$ hidden layers where $l$ denotes the individual index for each layer such that $l \in {0,&#8230;,L}$. Let $\boldsymbol{Y} ^{(l)}$ denote the output of the nodes at layer $l$. $\boldsymbol{Y} ^{(0)}=\boldsymbol{X}$ is the input and $f(\boldsymbol{X})=f^{(L)}(\boldsymbol{X})=\boldsymbol{Y}^{(L)}=\boldsymbol{Y}$ is the output of the entire network. $\boldsymbol{W} ^{(l)}$ and $\boldsymbol{b}^{(l)}$ are the weights and biases of layer $l$, respectively. Then, the feedforward operation of the neural network can be written as 
+\begin{equation}
+\label{neuralnetwork}
+f^{(l)}\big(\boldsymbol{X}\big) = 
+\boldsymbol{Y}^{(l)} = 
+h^{(l)}\big(\boldsymbol{Y}^{(l-1)}\boldsymbol{W}^{(l)} + \boldsymbol{b}^{(l)}\big)
+\end{equation}
+where $h^{(l)}$(.) is the activation function applied at layer $l$. For the sake of clarity, let us specify the activities going into the augmented softmax layer of this network such that
+\begin{equation}
+\boldsymbol{Z} := \boldsymbol{Y}^{(L-2)}\boldsymbol{W}^{(L-1)} + \boldsymbol{b}^{(L-1)}
+\end{equation}
+and its positive part as $\boldsymbol{B}$ such that 
+\begin{equation}
+g\big(\boldsymbol{X}\big) = \boldsymbol{B} := \max{\big(\boldsymbol{0}, \boldsymbol{Z}\big)}
+\end{equation}
+both of which correspond to $m \times n$ matrices, where $n=n_\psi k$ and $k$ is the clustering coefficient of <span class="caps">ACOL</span> and chosen as 4 for this application.
+Then, the output of a neural network with <span class="caps">ACOL</span> can be written in terms of $\boldsymbol{Z}$ as 
+\begin{equation}
+\label{acoloutput}
+f\big(\boldsymbol{X}\big) = 
+\boldsymbol{Y} =<br>
+h^{(L)}\bigg(h^{(L-1)}\big(\boldsymbol{Z}\big)\boldsymbol{W}^{(L)} + \boldsymbol{b}^{(L)}\bigg)
+\end{equation}
+where $\boldsymbol{Y}$ is an $m \times n_\psi$ matrix in which $Y_{ij}$ is the probability of the $i$\textsuperscript{th} example belonging to the $j$\textsuperscript{th} pseudo parent. Since $h^{(L-1)}(.)$ and $h^{(L)}(.)$ respectively correspond to softmax and linear activation functions and $\boldsymbol{b}^{(L)} = \boldsymbol{0}$, then (\ref{acoloutput}) further simplifies into 
+\begin{equation}
+f\big(\boldsymbol{X}\big) = 
+\boldsymbol{Y} =<br>
+\softmax\big(\boldsymbol{Z}\big)\boldsymbol{W}^{(L)}
+\end{equation}
+where $\boldsymbol{W}^{(L)}$ is an $n \times n_\psi$ matrix representing the constant weights between augmented softmax layer and pooling layer.
+%\begin{equation}
+%\boldsymbol{W}^{(L)}=
+%\begin{bmatrix}
+%\boldsymbol{I}<em>{n</em>\psi} \
+%\boldsymbol{I}<em>{n</em>\psi} \
+%\vdots \
+%\boldsymbol{I}<em>{n</em>\psi}
+%\end{bmatrix}
+%\end{equation}
+%and simply sums up the output probabilities of the softmax nodes belonging to the same pseudo-class. Since the output of the augmented softmax layer is already normalized, no additional averaging is needed at the pooling layer and summation alone is sufficient to calculate final pseudo-class probabilities. 
+Also, unsupervised regularization $\mathcal{U}(.)$ is applied to $\boldsymbol{B}$ to penalize the range of its distribution.
+The overall objective function of the training then becomes
+\begin{equation}
+\label{overallobj}
+%\mathcal{L}\big(f\big(\boldsymbol{X}\big), \boldsymbol{t}\big) + 
+%\mathcal{U}\big(g\big(\boldsymbol{X}\big)\big) = 
+\mathcal{L}\big(\boldsymbol{Y}, \boldsymbol{t}\big) +
+\mathcal{U}\big(\boldsymbol{B}\big) = 
+%\mathcal{L}\big(\boldsymbol{Y}, \boldsymbol{t}\big) +
+%c_R\sum\limits_{j=1}^{n}\bigg(\max\big(\boldsymbol{B}<em _j=",j">{:,j}\big)-\min\big(\boldsymbol{B}</em>\big)\bigg) = 
+\mathcal{L}\big(\softmax(\boldsymbol{Z})\boldsymbol{W}^{(L)}, \boldsymbol{t}\big) +
+c_R\sum\limits_{j=1}^{n}\bigg(\max\big(\boldsymbol{B}<em _j=",j">{:,j}\big)-\min\big(\boldsymbol{B}</em>\big)\bigg)
+\end{equation}
+where $\mathcal{L}(.)$ is the supervised log loss function, $\boldsymbol{t}=[t_1,&#8230;,t_{m}]^T$ is the vector of the provided pseudo parent labels such that $t_i \in {1,&#8230;,n_\psi}$, $\boldsymbol{B}_{:,j}$ corresponds to $j$\textsuperscript{th} column vector of matrix $\boldsymbol{B}$ and $c_R$ is the weighting coefficient.
+%Then, the supervised (in fact, pseudo-supervised) portion of the objective function becomes
+%\begin{equation}
+%\label{overallobj}
+%\mathcal{L}\big(f\big(\boldsymbol{X}\big), \boldsymbol{t}\big) = 
+%\mathcal{L}\big(\boldsymbol{Y}, \boldsymbol{t}\big) = 
+%\mathcal{L}\big(\softmax\big(\boldsymbol{Z}\big)\boldsymbol{W}^{(L)}, \boldsymbol{t}\big)&nbsp;%\end{equation}.</p>
+<p>Training of the proposed framework is performed according to simultaneous supervised and unsupervised updates resulting from the objective function given in (\ref{overallobj}). We adopt stochastic gradient descent in the mini-batch mode \cite{bottou10sgd} for optimization. Algorithm 2 below describes the entire training procedure. Along with unsupervised regularization, dropout method \cite{dropout} is also applied to the augmented softmax layer to distribute the examples across the duplicated softmax nodes. For each mini-batch, an $1 \times n$ row vector $\boldsymbol{r}$ of independent Bernoulli random variables is sampled and multiplied element-wise with the output of the augmented softmax layer. This operation corresponds to dropping out each one of the $n$ softmax nodes with the probability of $p$ for that&nbsp;batch.</p>
+<p>After training phase is completed, network is simply truncated by completely disconnecting the pooling layer as shown in Figure~\ref{fig:clustering_red} and the rest of the network with trained weights is used to assign the annotations to each example. This assignment can be described as
+\begin{equation}
+y_i :=  \argmax_{1\le j \le n}Z_{ij}
+\end{equation}
+where $y_i$ is the annotation assigned to $i$\textsuperscript{th} example. Using the assigned annotations $\boldsymbol{y}$ and the metagenome labels $\boldsymbol{q}$, the similarity matrix $\boldsymbol{S}$ used to obtain the dendrogram provided in this article is constructed as shown in Algorithm 3. Since applying dropout to distribute the examples across the duplicated softmax nodes also introduces a variance to the assigned annotations, we take the average of the similarity matrices obtained during the last 20 epochs of the training. Moreover, to reduce the variance due to the random generation of the pseudo parent-classes, we repeat the entire procedure 100 times with a new selection of pseudo parents for each&nbsp;repetition.        </p>
+    </article>
+
+        <div class="tags">
+            <p>tags: <a href="../tag/acol.html">ACOL</a>, <a href="../tag/latent-annotations.html">latent annotations</a>, <a href="../tag/pseudo-parent-classes.html">pseudo parent-classes</a>, <a href="../tag/genomics.html">genomics</a></p>
+        </div>
+
+    <hr>
+
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <ul class="list-inline text-center">
+                            <li>
+                                <a href="http://github.com/ozcell">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://twitter.com/ozselkilinc">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.linkedin.com/in/özsel-kılınç-44b01092">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                    </ul>
+<p class="copyright text-muted">
+    Blog powered by <a href="http://getpelican.com">Pelican</a>,
+    which takes great advantage of <a href="http://python.org">Python</a>.
+</p>                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="../theme/js/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../theme/js/bootstrap.min.js"></script>
+
+        <!-- Custom Theme JavaScript -->
+        <script src="../theme/js/clean-blog.min.js"></script>
+
+</body>
+
+</html>
