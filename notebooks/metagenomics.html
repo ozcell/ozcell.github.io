@@ -194,7 +194,7 @@ h^{(L)}\bigg(h^{(L-1)}\big(\boldsymbol{Z}\big)\boldsymbol{W}^{(L)} + \boldsymbol
 <p>\begin{equation}
 f\big(\boldsymbol{X}\big) = 
 \boldsymbol{Y} =<br>
-\softmax\big(\boldsymbol{Z}\big)\boldsymbol{W}^{(L)}&nbsp;\end{equation}</p>
+softmax\big(\boldsymbol{Z}\big)\boldsymbol{W}^{(L)}&nbsp;\end{equation}</p>
 <p>where $\boldsymbol{W}^{(L)}$ is an $n \times n_\psi$ matrix representing the constant weights between augmented softmax layer and pooling&nbsp;layer.</p>
 <p>\begin{equation}
 \boldsymbol{W}^{(L)}=
@@ -210,7 +210,7 @@ The overall objective function of the training then&nbsp;becomes</p>
 <p>\begin{equation}
 \mathcal{L}\big(\boldsymbol{Y}, \boldsymbol{t}\big) +
 \mathcal{U}\big(\boldsymbol{B}\big) = 
-\mathcal{L}\big(\softmax(\boldsymbol{Z})\boldsymbol{W}^{(L)}, \boldsymbol{t}\big) +
+\mathcal{L}\big(softmax(\boldsymbol{Z})\boldsymbol{W}^{(L)}, \boldsymbol{t}\big) +
 c_R\sum\limits_{j=1}^{n}\bigg(\max\big(\boldsymbol{B}<em _j=",j">{:,j}\big)-\min\big(\boldsymbol{B}</em>\big)\bigg)&nbsp;\end{equation}</p>
 <p>where $\mathcal{L}(.)$ is the supervised log loss function, $\boldsymbol{t}=[t_1,&#8230;,t_{m}]^T$ is the vector of the provided pseudo parent labels such that $t_i \in {1,&#8230;,n_\psi}$, $\boldsymbol{B}_{:,j}$ corresponds to $j$\textsuperscript{th} column vector of matrix $\boldsymbol{B}$ and $c_R$ is the weighting&nbsp;coefficient.</p>
 <p>Training of the proposed framework is performed according to simultaneous supervised and unsupervised updates resulting from the objective function given in (\ref{overallobj}). We adopt stochastic gradient descent in the mini-batch mode \cite{bottou10sgd} for optimization. Algorithm 2 below describes the entire training procedure. Along with unsupervised regularization, dropout method \cite{dropout} is also applied to the augmented softmax layer to distribute the examples across the duplicated softmax nodes. For each mini-batch, an $1 \times n$ row vector $\boldsymbol{r}$ of independent Bernoulli random variables is sampled and multiplied element-wise with the output of the augmented softmax layer. This operation corresponds to dropping out each one of the $n$ softmax nodes with the probability of $p$ for that&nbsp;batch.       </p>
