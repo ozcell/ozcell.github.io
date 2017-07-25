@@ -48,7 +48,7 @@
                 <meta name="twitter:image" content="../theme/images/post-bg.jpg">
     <link rel="icon" type="image/png" href="../theme/images/icons/favicon.png">
 	<link rel="icon" type="image/x-icon" href="../favicon.ico">
-  
+	 
   <!-- Loading mathjax macro -->
   <!-- Load mathjax -->
     <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
@@ -65,12 +65,12 @@
         // we use CSS to left justify single line equations in code cells.
         displayAlign: 'center',
         "HTML-CSS": {
-            styles: {'.MathJax_Display': {"margin": 0}},
+            styles: {'.MathJax_Display': {"margin": 0},
+                     ".MathJax .mo, .MathJax .mi": {color: "black ! important"}},
             linebreaks: { automatic: true }
         }
     });
     </script>
-  
     
 </head>
 
